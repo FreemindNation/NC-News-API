@@ -5,7 +5,7 @@ const { handleCustomErrors, handleGeneric404Errors } = require('./error-handling
 const app = express();
 
 
-// app.use(express.json());
+app.use(express.json());
 
 app.get('/api/topics', getTopics);
 

@@ -27,7 +27,7 @@ describe('/api/topics', () => {
 
     });
 
-    test.only('404: responds with "Route not found" if passed an invalid route', () => {
+    test('404: responds with "Route not found" if passed an invalid route', () => {
         return request(app)
         .get('/api/not-a-valid-route')
         .expect(404)
