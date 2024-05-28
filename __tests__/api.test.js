@@ -21,9 +21,18 @@ describe('/api/topics', () => {
                 expect(topic).toMatchObject({
                     description: expect.any(String),
                     slug: expect.any(String)
-                })
-            })
-        })
+                });
+            });
+        });
 
+    });
+
+    test.only('404: responds with "Route not found" if passed an invalid route', () => {
+        return request(app)
+        .get('/api/not-a-valid-route')
+        .expect(404)
+        .then(({ body })=> {
+            expect(body.msg).toBe('Route not found');
+        })
     });
 });
