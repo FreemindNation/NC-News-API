@@ -99,6 +99,43 @@ describe('GET /api/articles/:article_id', () => {
       })
     });
   });
+
+describe('GET /api/articles', () => {
+    test.only('200: responds with an array of all aricle objects sorted by date in DESC order', () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body })=> {
+            const { articles } = body;
+            
+            expect(articles).toHaveLength(13)
+
+            articles.forEach((article)=> {
+                expect(article).toMatchObject({
+                    author: expect.any(String),
+                    title: expect.any(String),
+                    article_id: expect.any(Number),
+                    topic: expect.any(String),
+                    created_at: expect.any(String),
+                    votes: expect.any(Number),
+                    article_img_url: expect.any(String),
+                    comment_count: expect.any(Number)
+                });
+            });
+
+            expect(articles).toBeSortedBy('created_at',{ descending: true, });
+        });
+    });
+
+    test.only('404: responds with "Route not found" if passed an invalid route', () => {
+      return request(app)
+      .get('/api/not-a-valid-route')
+      .expect(404)
+      .then(({ body })=> {
+          expect(body.msg).toBe('Route not found');
+      })
+  });
+});
   
 
 
