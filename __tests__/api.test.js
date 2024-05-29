@@ -11,7 +11,7 @@ beforeEach(() => seed(testData));
 
 afterAll (()=> db.end());
 
-describe('/api/topics', () => {
+describe('GET /api/topics', () => {
     test('200: responds with all available topics', () => {
         return request(app)
         .get('/api/topics')
@@ -40,7 +40,7 @@ describe('/api/topics', () => {
     });
 });
 
-describe('/api', () => {
+describe('GET /api', () => {
     test('200: responds with an object of all available endpoints', () => {
       return request(app)
       .get('/api')
@@ -61,6 +61,44 @@ describe('/api', () => {
     });
 });
 
-
+describe('GET /api/articles/:article_id', () => {
+    test('200: responds with a single article matching the given id', () => {
+      return request(app)
+      .get('/api/articles/1')
+      .expect(200)
+      .then(({ body })=> {
+        const { article } = body;
+        expect(article).toMatchObject({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url:expect.any(String)
+        })
+      })
+    });
+  
+    test('400: responds with " Bad request" if passed a non numeric id', () => {
+      return request(app)
+      .get('/api/articles/not-a-number')
+      .expect(400)
+      .then(({ body })=> {
+        expect(body.msg).toBe('Bad request');
+      });
+    });
+  
+    test('404: responds with "Not found" if passed an number id that does not exist', () => {
+      return request(app)
+      .get('/api/articles/609')
+      .expect(404)
+      .then(({ body })=> {
+        expect(body.msg).toBe('Not found')
+      })
+    });
+  });
+  
 
 
