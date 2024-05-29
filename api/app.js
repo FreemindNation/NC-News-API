@@ -1,6 +1,7 @@
 const express = require('express');
-const { getTopics } = require('../api/controllers/topics-controllers');
-const { handleCustomErrors, handleGeneric404Errors, handleServerErrors } = require('./error-handling/handle-errors');
+const { getTopics } = require('./controllers/topics-controllers');
+const { handleGeneric404Errors, handleServerErrors } = require('./error-handling/handle-errors');
+const { getEndpoints } = require('./controllers/endpoints-controllers');
 
 const app = express();
 
@@ -9,9 +10,7 @@ const app = express();
 
 app.get('/api/topics', getTopics);
 
-
-
-
+app.get('/api', getEndpoints);
 
 
 
