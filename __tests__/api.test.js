@@ -101,7 +101,7 @@ describe('GET /api/articles/:article_id', () => {
   });
 
 describe('GET /api/articles', () => {
-    test.only('200: responds with an array of all aricle objects sorted by date in DESC order', () => {
+    test('200: responds with an array of all aricle objects sorted by date in DESC order', () => {
         return request(app)
         .get('/api/articles')
         .expect(200)
@@ -127,7 +127,7 @@ describe('GET /api/articles', () => {
         });
     });
 
-    test.only('404: responds with "Route not found" if passed an invalid route', () => {
+    test('404: responds with "Route not found" if passed an invalid route', () => {
       return request(app)
       .get('/api/not-a-valid-route')
       .expect(404)
