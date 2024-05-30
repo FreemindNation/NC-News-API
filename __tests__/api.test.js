@@ -138,7 +138,7 @@ describe('GET /api/articles', () => {
 });
 
 describe('GET /api/articles/:article_id/comments', () => {
-  test.only('200: responds with a list of all comments by the given id sorted by date in descinding order', () => {
+  test('200: responds with a list of all comments by the given id sorted by date in descinding order', () => {
     return request(app)
     .get('/api/articles/1/comments')
     .expect(200)
@@ -161,7 +161,7 @@ describe('GET /api/articles/:article_id/comments', () => {
     })
   });
 
-  test.only('400: responds with " Bad request" if passed a non numeric id', () => {
+  test('400: responds with " Bad request" if passed a non numeric id', () => {
     return request(app)
     .get('/api/articles/not-a-number/comments')
     .expect(400)
@@ -170,7 +170,7 @@ describe('GET /api/articles/:article_id/comments', () => {
     });
   });
 
-  test.only('404: responds with "Article not found" if passed an invalid route', () => {
+  test('404: responds with "Article not found" if passed an invalid route', () => {
     return request(app)
     .get('/api/articles/456/comments')
     .expect(404)
