@@ -25,5 +25,21 @@
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an object containing an article matching the given article_id on a key of article",
+    "queries": [],
+    "exampleResponse": {
+      "article": {
+        "author": "John Doe",
+        "title": "The Future of tech",
+        "article_id": 12345,
+        "body": "This is a sample article about the future of technology.",
+        "topic": "Technology",
+        "created_at": "2024-05-29T12:34:56Z",
+        "votes": 100,
+        "article_img_url": "https://example.com/image.jpg"
+      } 
+    }
   }
 }
