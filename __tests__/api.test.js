@@ -133,8 +133,52 @@ describe('GET /api/articles', () => {
       .expect(404)
       .then(({ body })=> {
           expect(body.msg).toBe('Route not found');
-      })
+      });
   });
+});
+
+describe('GET /api/articles/:article_id/comments', () => {
+  test.only('200: responds with a list of all comments by the given id sorted by date in descinding order', () => {
+    return request(app)
+    .get('/api/articles/1/comments')
+    .expect(200)
+    .then(({ body })=> {
+      const { comments } = body;
+      
+      expect(comments).toHaveLength(11);
+      expect(comments).toBeSortedBy('created_at', { descending: true, });
+      
+      comments.forEach((comment)=> {
+        expect(comment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: expect.any(String),
+          votes: expect.any(Number),
+          author: expect.any(String),
+          article_id: expect.any(Number),
+          created_at: expect.any(String),
+        })
+      })
+    })
+  });
+
+  test.only('400: responds with " Bad request" if passed a non numeric id', () => {
+    return request(app)
+    .get('/api/articles/not-a-number/comments')
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request');
+    });
+  });
+
+  test.only('404: responds with "Article not found" if passed an invalid route', () => {
+    return request(app)
+    .get('/api/articles/456/comments')
+    .expect(404)
+    .then(({ body })=> {
+        expect(body.msg).toBe('Article not found');
+    })
+});
+
 });
   
 
