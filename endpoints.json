@@ -57,5 +57,19 @@
       }
       
     ]
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": " adds a comment for an article by the given article id and respond with the added comment",
+    "queries":[],
+    "exampleResponse": {
+      "newComment": {
+        "comment_id": 1,
+        "votes": 0,
+        "created_at": "2024-05-30T12:34:56Z",
+        "author": "butter_bridge",
+        "body": "This is a new comment",
+        "article_id": 1
+      }
+    }
   }
 }

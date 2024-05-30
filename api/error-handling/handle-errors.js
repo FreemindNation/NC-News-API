@@ -15,7 +15,8 @@ exports.handleCustomErrors = (err, req, res, next)=> {
 }
 
 exports.handleSqlErrors = (err, req, res, next)=> {
-    if(err.code === '22P02') {
+    
+    if(err.code === '22P02' || err.code === '23503' || err.code === '23502') {
         res.status(400).send({ msg: 'Bad request' });
     }
     else {
@@ -25,11 +26,13 @@ exports.handleSqlErrors = (err, req, res, next)=> {
 
 
 exports.handleGeneric404Errors = (req, res)=> {
+
     res.status(404).send({msg: 'Route not found'});
 }
 
 
 
 exports.handleServerErrors = (err, req, res, next)=> {
+    console.log(err);
     res.status(500).send({msg: 'Internal server error'})
 }
