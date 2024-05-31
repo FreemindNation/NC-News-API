@@ -107,7 +107,7 @@ describe('GET /api/articles', () => {
         .expect(200)
         .then(({ body })=> {
             const { articles } = body;
-            
+          
             expect(articles).toHaveLength(13)
 
             articles.forEach((article)=> {
@@ -125,6 +125,38 @@ describe('GET /api/articles', () => {
 
             expect(articles).toBeSortedBy('created_at',{ descending: true, });
         });
+    });
+
+    test('200: responds with articles filtered by the topic query provided', () => {
+      return request(app)
+      .get('/api/articles?topic=cats')
+      .expect(200)
+      .then(({ body })=> {
+        const { articles } = body;
+        
+        expect(articles).toHaveLength(1)
+        articles.forEach((article)=> {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: 'cats',
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number)
+          })
+        })
+      })
+    });
+
+    test('400: responds with "Article not found" if query is wrong data type', () => {
+      return request(app)
+      .get('/api/articles?topic=water')
+      .expect(404)
+      .then(({ body })=> {
+        expect(body.msg).toBe('Article not found')
+      })
     });
 
     test('404: responds with "Route not found" if passed an invalid route', () => {
@@ -154,7 +186,7 @@ describe('GET /api/articles/:article_id/comments', () => {
           body: expect.any(String),
           votes: expect.any(Number),
           author: expect.any(String),
-          article_id: expect.any(Number),
+          article_id: 1,
           created_at: expect.any(String),
         })
       })
@@ -339,7 +371,6 @@ describe('GET /api/users', () => {
       .expect(200)
       .then(({ body })=> {
           const { users }  = body;
-          console.log(body);
           expect(users).toHaveLength(4)
           users.forEach((user)=> {
               expect(user).toMatchObject({

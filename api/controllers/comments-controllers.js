@@ -7,11 +7,8 @@ const { selectCommentsByArticleId, insertCommentByArticleId, removeCommentById }
 exports.getCommentsByArticleId = (req, res, next)=> {
         const { article_id } = req.params;
 
-    const promises = [selectCommentsByArticleId(article_id)]
+    const promises = [selectCommentsByArticleId(article_id), checkArticleExist(article_id)]
 
-    if(article_id) {
-        promises.push(checkArticleExist(article_id));
-    }
 
     Promise.all(promises)
     .then((resolvedPromises)=> {
