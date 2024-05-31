@@ -87,5 +87,10 @@
         "article_img_url": "https://example.com/image.jpg"
       }
     }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes comment by given comment id. no response given",
+    "queries":[]
+    
   }
 }

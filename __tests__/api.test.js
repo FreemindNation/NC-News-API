@@ -305,6 +305,32 @@ describe('PATCH /api/articles/:article_id', () => {
     })
   });
 });
+
+describe('DELETE /api/comments/:comment_id', () => {
+  test('204: delete a comment by the given comment id', () => {
+    return request(app)
+    .delete('/api/comments/1')
+    .expect(204)
+  });
+
+  test('400: responds with "Bad request" if passed a non numeric comment id', () => {
+    return request(app)
+    .delete('/api/comments/not-a-number')
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request');
+    })
+  });
+
+  test('404: responds with "Comment not found" if passed a numberic but non existent comment id', () => {
+    return request(app)
+    .delete('/api/comments/55655')
+    .expect(404)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Comment not found');
+    })
+  });
+});
   
 
 
