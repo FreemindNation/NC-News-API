@@ -331,6 +331,37 @@ describe('DELETE /api/comments/:comment_id', () => {
     })
   });
 });
+
+describe('GET /api/users', () => {
+  test('200: responds with all available users', () => {
+      return request(app)
+      .get('/api/users')
+      .expect(200)
+      .then(({ body })=> {
+          const { users }  = body;
+          console.log(body);
+          expect(users).toHaveLength(4)
+          users.forEach((user)=> {
+              expect(user).toMatchObject({
+                  username: expect.any(String),
+                  name: expect.any(String),
+                  avatar_url: expect.any(String)
+              });
+          });
+      });
+
+  });
+
+  test('404: responds with "Route not found" if passed an invalid route', () => {
+      return request(app)
+      .get('/api/not-a-valid-route')
+      .expect(404)
+      .then(({ body })=> {
+          expect(body.msg).toBe('Route not found');
+      })
+  });
+});
+
   
 
 
