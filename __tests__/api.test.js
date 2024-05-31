@@ -217,12 +217,87 @@ describe('POST /api/articles/:article_id/comments', () => {
     })
   });
 
-  test('400: responds with "Bad request" when postBody is missing fields', () => {
+  test('400: responds with "Bad request" when body is missing fields', () => {
     const postBody = {
       username: 'butter_bridge'
     }
     return request(app)
     .post('/api/articles/1/comments')
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+        expect(body.msg).toBe('Bad request');
+    })
+  });
+});
+
+describe('PATCH /api/articles/:article_id', () => {
+  test('200: updates an article by the given id and responds with the updated article', () => {
+    const updateBody = {
+      inc_vote: 100
+    }
+    return request(app)
+    .patch('/api/articles/1')
+    .send(updateBody)
+    .expect(200)
+    .then(({ body })=> {
+      const { updatedArticle } = body;
+      expect(updatedArticle).toMatchObject({
+          article_id: 1,
+          title: 'Living in the shadow of a great man',
+          topic: 'mitch',
+          author: 'butter_bridge',
+          body: 'I find this existence challenging',
+          created_at: '2020-07-09T20:11:00.000Z',
+          votes: 200,
+          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+      })
+    })
+  });
+
+  test('400: responds with "Bad request" when Body is missing fields', () => {
+    const postBody = {};
+    return request(app)
+    .patch('/api/articles/1')
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+        expect(body.msg).toBe('Bad request');
+    })
+  });
+
+  test('400: responds with "Bad request" when Body with incorrect data type', () => {
+    const postBody = {
+      inc_vote: 'not-a-number'
+    };
+    return request(app)
+    .patch('/api/articles/1')
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+        expect(body.msg).toBe('Bad request');
+    })
+  });
+
+  test('404: responds with "Article not found" if passed non existent id', () => {
+    const postBody = {
+      inc_vote: 100
+    };
+    return request(app)
+    .patch('/api/articles/8999')
+    .send(postBody)
+    .expect(404)
+    .then(({ body })=> {
+        expect(body.msg).toBe('Article not found');
+    })
+  });
+
+  test('400: responds with "Bad request" if passed non numeric id', () => {
+    const postBody = {
+      inc_vote: 100
+    };
+    return request(app)
+    .patch('/api/articles/not-a-number')
     .send(postBody)
     .expect(400)
     .then(({ body })=> {
