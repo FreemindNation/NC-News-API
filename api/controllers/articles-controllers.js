@@ -12,12 +12,12 @@ exports.getArticlesById = (req, res, next)=> {
 }
 
 exports.getArticles = (req, res, next)=> {
-
-selectArticles()
-.then((articles)=> {
+    const { topic } = req.query;
+    selectArticles(topic)
+    .then((articles)=> {
     res.status(200).send({ articles });
-})
-.catch(next);
+    })
+    .catch(next);
 }
 
 exports.patchArticleById = (req, res, next)=> {
