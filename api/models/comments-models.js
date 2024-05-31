@@ -22,10 +22,9 @@ exports.insertCommentByArticleId = (newComment, article_id)=> {
     INSERT INTO comments (body, article_id, author, votes, created_at) VALUES %L
      RETURNING *`, [formattedComment])
     
-    // console.log(sqlQuery, '<<<<< query');
+   
     return db.query(sqlQuery)
     .then(({ rows })=> {
-        console.log(rows);
         return rows[0];
     })
 }

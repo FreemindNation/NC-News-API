@@ -71,5 +71,21 @@
         "article_id": 1
       }
     }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates an article of the given article id and responds with the updated article",
+    "queries":[],
+    "exampleResponse": {
+      "updatedArticle": {
+        "author": "John Doe",
+        "title": "The Future of tech",
+        "article_id": 12345,
+        "body": "This is a sample article about the future of technology.",
+        "topic": "Technology",
+        "created_at": "2024-05-29T12:34:56Z",
+        "votes": 100,
+        "article_img_url": "https://example.com/image.jpg"
+      }
+    }
   }
 }

@@ -48,5 +48,16 @@ exports.checkArticleExist = (article_id) => {
     if(rows.length === 0) {
       return Promise.reject({ status: 404, msg: 'Article not found' })
     }
+  });
+}
+
+exports.updateArticleById = (article_id, inc_vote)=> {
+  return db.query(`UPDATE articles SET votes = votes + $1
+  WHERE article_id = $2 RETURNING *`, [inc_vote, article_id])
+  .then(({ rows })=> {
+    if(rows.length === 0){
+      return Promise.reject({status: 404, msg: 'Article not found'})
+    }
+    return rows[0];
   })
 }

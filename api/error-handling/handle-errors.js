@@ -1,9 +1,4 @@
 
-exports.handleGeneric404Errors = (req, res)=> {
-    res.status(404).send({msg: 'Route not found'});
-}
-
-
 
 exports.handleCustomErrors = (err, req, res, next)=> {
     if(err.status && err.msg) {
@@ -33,6 +28,5 @@ exports.handleGeneric404Errors = (req, res)=> {
 
 
 exports.handleServerErrors = (err, req, res, next)=> {
-    console.log(err);
     res.status(500).send({msg: 'Internal server error'})
 }
