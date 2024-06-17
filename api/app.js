@@ -5,8 +5,12 @@ const { getEndpoints } = require('./controllers/endpoints-controllers');
 const { getArticlesById, getArticles, patchArticleById } = require('./controllers/articles-controllers');
 const { getCommentsByArticleId, postCommentByArticleId, deleteCommentById } = require('./controllers/comments-controllers');
 const { getUsers } = require('./controllers/users-controllers');
+const cors = require('cors');
+
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
