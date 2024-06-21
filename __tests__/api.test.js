@@ -130,18 +130,19 @@ describe('GET /api/articles', () => {
 
     test('200: responds with articles filtered by the topic query provided', () => {
       return request(app)
-      .get('/api/articles?topic=cats')
+      .get('/api/articles')
+      .query({ topic: 'mitch'})
       .expect(200)
       .then(({ body })=> {
         const { articles } = body;
         
-        expect(articles).toHaveLength(1)
+        expect(articles).toHaveLength(12)
         articles.forEach((article)=> {
           expect(article).toMatchObject({
             author: expect.any(String),
             title: expect.any(String),
             article_id: expect.any(Number),
-            topic: 'cats',
+            topic: 'mitch',
             created_at: expect.any(String),
             votes: expect.any(Number),
             article_img_url: expect.any(String),
@@ -151,9 +152,97 @@ describe('GET /api/articles', () => {
       })
     });
 
-    test('400: responds with "Article not found" if query is wrong data type', () => {
+    test('200: responds with articles sorted by votes in ascending order', () => {
       return request(app)
-      .get('/api/articles?topic=water')
+      .get('/api/articles')
+      .query({ sort_by: 'votes', order: 'asc' })
+      .expect(200)
+      .then(({ body })=> {
+        const { articles } = body;
+        
+        expect(articles).toHaveLength(13)
+        expect(articles).toBeSortedBy('votes')
+      })
+    });
+
+    test('200: responds with an array of all aricle objects sorted by date in DESC order', () => {
+      return request(app)
+      .get('/api/articles')
+      .query({ sort_by: 'comment_count', order: 'desc' })
+      .expect(200)
+      .then(({ body })=> {
+          const { articles } = body;
+        
+          expect(articles).toHaveLength(13)
+
+          articles.forEach((article)=> {
+              expect(article).toMatchObject({
+                  author: expect.any(String),
+                  title: expect.any(String),
+                  article_id: expect.any(Number),
+                  topic: expect.any(String),
+                  created_at: expect.any(String),
+                  votes: expect.any(Number),
+                  article_img_url: expect.any(String),
+                  comment_count: expect.any(Number)
+              });
+          });
+
+          expect(articles).toBeSortedBy('comment_count',{ descending: true, });
+      });
+  });
+
+  test('200: responds with an array of all aricle objects with topic of mitch sorted by date in DESC order', () => {
+    return request(app)
+    .get('/api/articles')
+    .query({ topic: 'mitch', sort_by: 'comment_count', order: 'desc' })
+    .expect(200)
+    .then(({ body })=> {
+        const { articles } = body;
+      
+        expect(articles).toHaveLength(12)
+
+        articles.forEach((article)=> {
+            expect(article).toMatchObject({
+                author: expect.any(String),
+                title: expect.any(String),
+                article_id: expect.any(Number),
+                topic: 'mitch',
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+                article_img_url: expect.any(String),
+                comment_count: expect.any(Number)
+            });
+        });
+
+        expect(articles).toBeSortedBy('comment_count',{ descending: true, });
+    });
+});
+
+  test('400: responds with "Bad request" if sort_by query is invalid', () => {
+    return request(app)
+    .get('/api/articles')
+    .query({ sort_by: 'invalid' })
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request')
+    })
+  });
+  
+  test('400: responds with "Bad request" if order query is invalid', () => {
+    return request(app)
+    .get('/api/articles')
+    .query({ order: 'invalid' })
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request')
+    })
+  });
+
+    test('404: responds with "Article not found" if no articles match the topic', () => {
+      return request(app)
+      .get('/api/articles')
+      .query({ topic: 'water' })
       .expect(404)
       .then(({ body })=> {
         expect(body.msg).toBe('Article not found')
