@@ -1,6 +1,6 @@
-# My First API
+# NC-News-API
 
-Welcome to My First API! This project is designed to demonstrate the creation and functionality of a simple RESTful API using Node.js, Express, PostgreSQL, and Jest and Supertest for testing.
+Welcome to NC-News-API! This project is designed to demonstrate the creation and functionality of a simple RESTful API using Node.js, Express, PostgreSQL, and Jest and Supertest for testing.
 
 ## Hosted Version
 
@@ -8,15 +8,15 @@ You can access the hosted version of this API [here](https://nc-news-4642.onrend
 
 ## Project Summary
 
-My First API is a fully functional RESTful API that allows users to interact with articles and comments. Users can perform various operations such as fetching articles, posting comments, updating article votes, and deleting articles or comments. The API is built with Node.js and Express, uses PostgreSQL for data storage, and is tested with Jest along side Supertest to ensure reliability and correctness.
+NC-News-API is a fully functional RESTful API that allows users to interact with articles and comments. Users can perform various operations such as fetching articles, posting comments, updating article votes, and deleting articles or comments. The API is built with Node.js and Express, uses PostgreSQL for data storage, and is tested with Jest along side Supertest to ensure reliability and correctness.
 
 ## Cloning the Repository
 
 To get started with this project, you need to clone the repository to your local machine:
 
 ```
-git clone https://github.com/FreemindNation/my-first-API.git
-cd my-first-API
+git clone https://github.com/FreemindNation/NC-News-API.git
+cd NC-News-API
 ```
 
 ## Installing Dependencies
