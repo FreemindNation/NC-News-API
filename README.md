@@ -57,7 +57,7 @@ Create a .env.test file in the root directory for the test database
 
 Then add the test database enviroment variable as follow :
 
-`PGDATABASE=nc_news_test`
+`PGDATABASE=test_database_name_here`
 
 Create an .env.development file in the root directory for the development database
 
@@ -65,7 +65,7 @@ Create an .env.development file in the root directory for the development databa
 
 Then add the development database environment variable as follow
 
-`PGDATABASE=nc_news`
+`PGDATABASE=development_database_name_here`
 
 You can then set up your databases by running the following command:
 
