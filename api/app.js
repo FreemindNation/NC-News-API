@@ -22,17 +22,17 @@ app.use('/api', apiRouter);
 
 // app.get('/api', getEndpoints);
 
-app.get('/api/articles/:article_id', getArticlesById);
+// app.get('/api/articles/:article_id', getArticlesById);
 
-app.get('/api/articles', getArticles);
+// app.get('/api/articles', getArticles);
 
 // app.get('/api/users', getUsers);
 
-app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
+// app.get('/api/articles/:article_id/comments', getCommentsByArticleId);
 
-app.post('/api/articles/:article_id/comments', postCommentByArticleId);
+// app.post('/api/articles/:article_id/comments', postCommentByArticleId);
 
-app.patch('/api/articles/:article_id', patchArticleById);
+// app.patch('/api/articles/:article_id', patchArticleById);
 
 app.delete('/api/comments/:comment_id', deleteCommentById);
 
