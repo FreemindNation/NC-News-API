@@ -1,10 +1,10 @@
 const express = require('express');
-const { getTopics } = require('./controllers/topics-controllers');
+// const { getTopics } = require('./controllers/topics-controllers');
 const { handleGeneric404Errors, handleServerErrors, handleCustomErrors, handleSqlErrors } = require('./error-handling/handle-errors');
-const { getEndpoints } = require('./controllers/endpoints-controllers');
-const { getArticlesById, getArticles, patchArticleById } = require('./controllers/articles-controllers');
-const { getCommentsByArticleId, postCommentByArticleId, deleteCommentById } = require('./controllers/comments-controllers');
-const { getUsers } = require('./controllers/users-controllers');
+// const { getEndpoints } = require('./controllers/endpoints-controllers');
+// const { getArticlesById, getArticles, patchArticleById } = require('./controllers/articles-controllers');
+// const { getCommentsByArticleId, postCommentByArticleId, deleteCommentById } = require('./controllers/comments-controllers');
+// const { getUsers } = require('./controllers/users-controllers');
 const cors = require('cors');
 const apiRouter = require('./routes/api-router');
 
@@ -34,7 +34,7 @@ app.use('/api', apiRouter);
 
 // app.patch('/api/articles/:article_id', patchArticleById);
 
-app.delete('/api/comments/:comment_id', deleteCommentById);
+// app.delete('/api/comments/:comment_id', deleteCommentById);
 
 
 
