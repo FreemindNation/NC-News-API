@@ -82,7 +82,7 @@ describe('GET /api/articles/:article_id', () => {
       })
     });
   
-    test('400: responds with " Bad request" if passed a non numeric id', () => {
+    test('400: responds with "Bad request" if passed a non numeric id', () => {
       return request(app)
       .get('/api/articles/not-a-number')
       .expect(400)
@@ -480,6 +480,32 @@ describe('GET /api/users', () => {
       .then(({ body })=> {
           expect(body.msg).toBe('Route not found');
       })
+  });
+});
+
+describe('GET /api/users/:username', () => {
+  test('200: responds with user by the given username', () => {
+    return request(app)
+    .get('/api/users/lurker')
+    .expect(200)
+    .then(({ body })=> {
+      const { user } = body;
+      expect(user).toMatchObject({
+        username: 'lurker',
+        name: 'do_nothing',
+        avatar_url: 'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png'
+ 
+      })
+    })
+  });
+
+  test('404: responds with "User not found" if passed a username that does not exist', () => {
+    return request(app)
+    .get('/api/users/not-a-username')
+    .expect(404)
+    .then(({ body })=> {
+      expect(body.msg).toBe('User not found');
+    })
   });
 });
 
