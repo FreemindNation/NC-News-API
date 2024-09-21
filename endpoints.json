@@ -11,7 +11,7 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": [ "topic", "sort_by", "order"],
+    "queries": ["topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
@@ -40,14 +40,14 @@
         "created_at": "2024-05-29T12:34:56Z",
         "votes": 100,
         "article_img_url": "https://example.com/image.jpg",
-        "comment_count":6
-      } 
+        "comment_count": 6
+      }
     }
   },
-  
+
   "GET /api/articles/:article_id/comments": {
     "description": "serves an array of all comments for the given article id.",
-    "queries":[],
+    "queries": [],
     "exampleResponse": [
       {
         "comment_id": 1,
@@ -57,12 +57,11 @@
         "article_id": 23,
         "created_at": "2024-05-29T12:34:56Z"
       }
-      
     ]
   },
   "POST /api/articles/:article_id/comments": {
     "description": " adds a comment for an article by the given article id and respond with the added comment",
-    "queries":[],
+    "queries": [],
     "exampleResponse": {
       "newComment": {
         "comment_id": 1,
@@ -76,7 +75,7 @@
   },
   "PATCH /api/articles/:article_id": {
     "description": "updates an article of the given article id and responds with the updated article",
-    "queries":[],
+    "queries": [],
     "exampleResponse": {
       "updatedArticle": {
         "author": "John Doe",
@@ -92,7 +91,7 @@
   },
   "DELETE /api/comments/:comment_id": {
     "description": "deletes comment by given comment id. no response given",
-    "queries":[]
+    "queries": []
   },
   "GET /api/users": {
     "description": "serves an array of all users",
@@ -109,5 +108,16 @@
         "avatar_url": "https://www.golenbock.com/wp-content/uploads/2024/01/placeholder-user.png"
       }
     ]
+  },
+  "GET /api/users/:username": {
+    "description": "serves an object containing a user matching the given username on a key of user",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "username": "lukeCage001",
+        "name": "do_everyrhing",
+        "avatar_url": "https://www.golenbock.com/wp-content/uploads/2024/01/placeholder-user.png"
+      }
+    }
   }
 }
