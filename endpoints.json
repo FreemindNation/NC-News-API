@@ -74,7 +74,7 @@
     }
   },
   "PATCH /api/articles/:article_id": {
-    "description": "updates an article of the given article id and responds with the updated article",
+    "description": "increments the vote of a specified article via article id by the given value and responds with the updated article",
     "queries": [],
     "exampleResponse": {
       "updatedArticle": {
@@ -117,6 +117,20 @@
         "username": "lukeCage001",
         "name": "do_everyrhing",
         "avatar_url": "https://www.golenbock.com/wp-content/uploads/2024/01/placeholder-user.png"
+      }
+    }
+  },
+  "PATCH /api/comments/:comments_id": {
+    "description": "increments the vote of a specified comment via comment id by the given value and responds with the updated comment",
+    "queries": [],
+    "exampleResponse": {
+      "updatedArticle": {
+        "comment_id": 1,
+        "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        "votes": 17,
+        "author": "butter_bridge",
+        "article_id": 9,
+        "created_at": "2020-04-06T12:17:00.000Z"
       }
     }
   }
