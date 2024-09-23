@@ -593,7 +593,7 @@ describe("PATCH: /api/comments/:comment_id", () => {
 });
 
 describe("POST: /api/articles", () => {
-  test.only("201: adds a new article with the provided body and responds with the added article", () => {
+  test("201: adds a new article with the provided body and responds with the added article", () => {
     const postBody = {
       author: "butter_bridge",
       title: "Understanding JavaScript Objects",
