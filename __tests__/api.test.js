@@ -620,4 +620,54 @@ describe("POST: /api/articles", () => {
         });
       });
   });
+
+  test('400: responds with "Bad request" if the post body contains invalid types', () => {
+    const postBody = {
+      author: 1,
+      title: "Understanding JavaScript Objects",
+      body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+      topic: "mitch",
+      article_img_url: "https://example.com/default-image.jpg",
+    }
+    return request(app)
+    .post("/api/articles")
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request')
+    })
+  });
+
+  test('400: responds with "Bad request" if the post body is missing fields', () => {
+    const postBody = {
+      title: "Understanding JavaScript Objects",
+      body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+      topic: "mitch",
+      article_img_url: "https://example.com/default-image.jpg",
+    }
+    return request(app)
+    .post("/api/articles")
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request')
+    })
+  });
+
+  test('400: responds with "Bad Request" if the post body contains invalid types', () => {
+    const postBody = {
+      author: 1,
+      title: "Understanding JavaScript Objects",
+      body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+      topic: "mitch",
+      article_img_url: "https://example.com/default-image.jpg",
+    }
+    return request(app)
+    .post("/api/articles")
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request')
+    })
+  });
 });
