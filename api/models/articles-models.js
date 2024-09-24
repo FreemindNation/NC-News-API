@@ -1,4 +1,5 @@
 const db = require("../../db/connection");
+const format = require("pg-format");
 
 exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
   const validsortQueries = [
@@ -92,4 +93,21 @@ exports.updateArticleById = (article_id, inc_vote) => {
       }
       return rows[0];
     });
+};
+
+exports.insertArticle = (newArticle) => {
+  const { author, title, body, topic, article_img_url } = newArticle;
+
+  const formattedArticle = [author, title, body, topic, article_img_url];
+
+  const sqlQuery = format(
+    `INSERT INTO articles (author, title, body, topic, article_img_url) VALUES %L RETURNING *`,
+    [formattedArticle]
+  );
+
+  return db.query(sqlQuery).then(({ rows }) => {
+    const newArticle = rows[0];
+    newArticle.comment_count = 0;
+    return newArticle;
+  });
 };

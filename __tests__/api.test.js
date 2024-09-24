@@ -292,7 +292,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 
   test('404: responds with "Article not found" if passed an invalid route', () => {
     return request(app)
-      .get("/api/articles/456/comments")
+      .get("/api/articles/4561/comments")
       .expect(404)
       .then(({ body }) => {
         expect(body.msg).toBe("Article not found");
@@ -330,6 +330,20 @@ describe("POST /api/articles/:article_id/comments", () => {
     };
     return request(app)
       .post("/api/articles/456/comments")
+      .send(postBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+
+  test('400: responds with "Bad request" if post body contains invalid types', () => {
+    const postBody = {
+      username: 3,
+      body: "This is a new comment",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
       .send(postBody)
       .expect(400)
       .then(({ body }) => {
@@ -575,5 +589,85 @@ describe("PATCH: /api/comments/:comment_id", () => {
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request");
       });
+  });
+});
+
+describe("POST: /api/articles", () => {
+  test("201: adds a new article with the provided body and responds with the added article", () => {
+    const postBody = {
+      author: "butter_bridge",
+      title: "Understanding JavaScript Objects",
+      body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+      topic: "mitch",
+      article_img_url: "https://example.com/default-image.jpg",
+    };
+    return request(app)
+      .post("/api/articles")
+      .send(postBody)
+      .expect(201)
+      .then(({ body }) => {
+        const { newArticle } = body;
+        expect(newArticle).toMatchObject({
+          article_id: 14,
+          author: "butter_bridge",
+          title: "Understanding JavaScript Objects",
+          body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+          topic: "mitch",
+          votes: 0,
+          created_at: expect.any(String),
+          comment_count: 0,
+          article_img_url: "https://example.com/default-image.jpg",
+        });
+      });
+  });
+
+  test('400: responds with "Bad request" if the post body contains invalid types', () => {
+    const postBody = {
+      author: 1,
+      title: "Understanding JavaScript Objects",
+      body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+      topic: "mitch",
+      article_img_url: "https://example.com/default-image.jpg",
+    }
+    return request(app)
+    .post("/api/articles")
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request')
+    })
+  });
+
+  test('400: responds with "Bad request" if the post body is missing fields', () => {
+    const postBody = {
+      title: "Understanding JavaScript Objects",
+      body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+      topic: "mitch",
+      article_img_url: "https://example.com/default-image.jpg",
+    }
+    return request(app)
+    .post("/api/articles")
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request')
+    })
+  });
+
+  test('400: responds with "Bad Request" if the post body contains invalid types', () => {
+    const postBody = {
+      author: 1,
+      title: "Understanding JavaScript Objects",
+      body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+      topic: "mitch",
+      article_img_url: "https://example.com/default-image.jpg",
+    }
+    return request(app)
+    .post("/api/articles")
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request')
+    })
   });
 });
