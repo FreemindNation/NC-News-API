@@ -60,7 +60,7 @@
     ]
   },
   "POST /api/articles/:article_id/comments": {
-    "description": " adds a comment for an article by the given article id and respond with the added comment",
+    "description": " adds a comment for an article by the given article id and responds with the added comment",
     "queries": [],
     "exampleResponse": {
       "newComment": {
@@ -131,6 +131,23 @@
         "author": "butter_bridge",
         "article_id": 9,
         "created_at": "2020-04-06T12:17:00.000Z"
+      }
+    }
+  },
+  "POST /api/articles": {
+    "description": "Adds a new article with the given Post body and responds with added article",
+    "queries": [],
+    "exampleResponse": {
+      "newArticle": {
+        "article_id": 14,
+        "title": "Understanding JavaScript Objects",
+        "topic": "mitch",
+        "author": "butter_bridge",
+        "body": "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+        "created_at": "2024-09-24T14:39:45.645Z",
+        "votes": 0,
+        "article_img_url":"https://example.com/default-image.jpg", 
+        "comment_count": 0
       }
     }
   }
