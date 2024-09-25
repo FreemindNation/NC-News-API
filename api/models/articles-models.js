@@ -1,7 +1,7 @@
 const db = require("../../db/connection");
 const format = require("pg-format");
 
-exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
+exports.selectArticles = (topic, sort_by = "created_at", order = "DESC", limit, offset) => {
   const validsortQueries = [
     "title",
     "topic",
@@ -36,7 +36,7 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
   `;
 
   let dbQuery = `
-  SELECT ${selectColumns}
+  SELECT ${selectColumns}, COUNT(*) OVER() AS total_count
   FROM articles LEFT JOIN comments ON 
   articles.article_id = comments.article_id`;
 
@@ -45,9 +45,9 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
     queryValues.push(topic);
   }
 
-  dbQuery += ` GROUP BY ${groupByColumns} ORDER BY ${sort_by} ${order}`;
+  dbQuery += ` GROUP BY ${groupByColumns} ORDER BY ${sort_by} ${order} LIMIT ${limit} OFFSET ${offset}`;
 
-  return db.query(dbQuery, queryValues).then(({ rows }) => {
+return db.query(dbQuery, queryValues).then(({ rows }) => {
     if (rows.length === 0) {
       return Promise.reject({ status: 404, msg: "Article not found" });
     }

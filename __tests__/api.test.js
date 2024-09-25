@@ -217,6 +217,35 @@ describe("GET /api/articles", () => {
       });
   });
 
+  test('200: responds with an array of articles with a limit set and starting from a set page and all the metadata', () => {
+    return request(app)
+    .get('/api/articles')
+    .query({ limit: 10, page: 1 })
+    .expect(200)
+    .then(({ body })=> {
+      const { articles, total_count, totalPages, currentPage, limit  } = body;
+    
+      expect(articles.length).toBeLessThanOrEqual(10)
+      expect(total_count).toBe(13)
+      expect(totalPages).toBe(2)
+      expect(currentPage).toBe(1)
+      expect(limit).toBe(10)
+
+      articles.forEach((article) => {
+        expect(article).toMatchObject({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+          comment_count: expect.any(Number),
+        });
+      });
+    })
+  });
+
   test('400: responds with "Bad request" if sort_by query is invalid', () => {
     return request(app)
       .get("/api/articles")

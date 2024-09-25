@@ -3,6 +3,7 @@ const {
   selectArticles,
   updateArticleById,
   insertArticle,
+  getTotalArticlesCount,
 } = require("../models/articles-models");
 
 exports.getArticlesById = (req, res, next) => {
@@ -16,9 +17,17 @@ exports.getArticlesById = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
   const { topic, sort_by, order } = req.query;
-  selectArticles(topic, sort_by, order)
+  const currentPage = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit, 10) || 100;
+  const offset = (currentPage - 1) * limit;
+
+  selectArticles(topic, sort_by, order, limit, offset)
     .then((articles) => {
-      res.status(200).send({ articles });
+        const totalCount = parseInt(articles[0].total_count);
+        const cleanedArticles = articles.map(({ total_count, ...restOfKeys })=> restOfKeys)
+        const totalPages = Math.ceil(totalCount / limit);
+        
+        res.status(200).send({ articles: cleanedArticles, total_count: totalCount, totalPages, currentPage, limit,  });
     })
     .catch(next);
 };
