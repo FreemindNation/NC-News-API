@@ -246,10 +246,60 @@ describe("GET /api/articles", () => {
     })
   });
 
+  test('400: responds with "Bad request" if limit or page queries are non numeric', () => {
+    return request(app)
+      .get("/api/articles")
+      .query({ limit: "invalid", page: 'not a number' })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+
+  test('400: responds with "Bad request" if limit or page queries are negative numbers', () => {
+    return request(app)
+      .get("/api/articles")
+      .query({ limit: -10, page: -2 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+
+  test('400: responds with "Bad request" if limit query exceeds max allowed value', () => {
+    return request(app)
+      .get("/api/articles")
+      .query({ limit: 101, page: 2 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+
+  test('404: responds with "Page not found" if page query exceeds max allowed value', () => {
+    return request(app)
+      .get("/api/articles")
+      .query({ limit: 10, page: 4 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Page not found");
+      });
+  });
+
   test('400: responds with "Bad request" if sort_by query is invalid', () => {
     return request(app)
       .get("/api/articles")
       .query({ sort_by: "invalid" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+
+  test('400: responds with "Bad request" if sort_by query is of wrong data type', () => {
+    return request(app)
+      .get("/api/articles")
+      .query({ sort_by: 5 })
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request");
@@ -266,15 +316,36 @@ describe("GET /api/articles", () => {
       });
   });
 
-  test('404: responds with "Article not found" if no articles match the topic', () => {
+  test('400: responds with "Bad request" if order query is of wrong datatype', () => {
     return request(app)
       .get("/api/articles")
-      .query({ topic: "water" })
-      .expect(404)
+      .query({ order: 4 })
+      .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("Article not found");
+        expect(body.msg).toBe("Bad request");
       });
   });
+
+  test('404: responds with "Articles not found" if no articles match the topic', () => {
+    return request(app)
+      .get("/api/articles")
+      .query({ topic: "gdfhrth" })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Articles not found");
+      });
+  });
+
+  test('404: responds with "Articles not found" if topic query is of wrong data type', () => {
+    return request(app)
+      .get("/api/articles")
+      .query({ topic: 4 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Articles not found");
+      });
+  });
+
 
   test('404: responds with "Route not found" if passed an invalid route', () => {
     return request(app)
@@ -319,7 +390,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 
-  test('404: responds with "Article not found" if passed an invalid route', () => {
+  test('404: responds with "Article not found" if passed a non existent article id', () => {
     return request(app)
       .get("/api/articles/4561/comments")
       .expect(404)

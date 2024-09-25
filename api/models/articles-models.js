@@ -1,7 +1,7 @@
 const db = require("../../db/connection");
 const format = require("pg-format");
 
-exports.selectArticles = (topic, sort_by = "created_at", order = "DESC", limit, offset) => {
+exports.selectArticles = (topic, sort_by = "created_at", order = "DESC", limit = 100, page = 1) => {
   const validsortQueries = [
     "title",
     "topic",
@@ -12,12 +12,31 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC", limit, 
   ];
   const validOrderQueries = ["ASC", "DESC", "asc", "desc"];
 
+  const parsedLimit = parseInt(limit, 10);
+  const parsedPage = parseInt(page, 10);
+  
+  if(isNaN(parsedLimit) || parsedLimit < 1 || parsedLimit > 100 ) {
+    return Promise.reject({ status: 400, msg: 'Bad request'})
+  }
+
+  if(isNaN(parsedPage) || parsedPage < 1 ) {
+    return Promise.reject({ status: 400, msg: 'Bad request'})
+  }
+
+  const currentPage = parsedPage;
+  const limitQuery = parsedLimit;
+  const offset = (currentPage - 1) * limitQuery;
+
   if (sort_by && !validsortQueries.includes(sort_by)) {
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
 
   if (order && !validOrderQueries.includes(order)) {
     return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+
+  if(topic && typeof topic !== 'string') {
+    return Promise.reject({ status: 400, msg: 'Bad request'})
   }
 
   const queryValues = [];
@@ -45,11 +64,22 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC", limit, 
     queryValues.push(topic);
   }
 
-  dbQuery += ` GROUP BY ${groupByColumns} ORDER BY ${sort_by} ${order} LIMIT ${limit} OFFSET ${offset}`;
+  dbQuery += ` GROUP BY ${groupByColumns} ORDER BY ${sort_by} ${order} LIMIT ${limitQuery} OFFSET ${offset}`;
 
 return db.query(dbQuery, queryValues).then(({ rows }) => {
+  const totalCount = rows.length > 0 ? parseInt(rows[0].total_count) : 0;
+  const totalPages = Math.ceil(totalCount / limitQuery);
+
+    if(rows.length === 0 &&  typeof topic === 'string') {
+      return Promise.reject({ status: 404, msg: "Articles not found" });
+    }
+
+    if (rows.length === 0 && currentPage > totalPages) {
+      return Promise.reject({ status: 404, msg: "Page not found" });
+    }
+
     if (rows.length === 0) {
-      return Promise.reject({ status: 404, msg: "Article not found" });
+      return Promise.reject({ status: 404, msg: "Articles not found" });
     }
     return rows;
   });
