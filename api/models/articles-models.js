@@ -35,9 +35,6 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC", limit =
     return Promise.reject({ status: 400, msg: "Bad request" });
   }
 
-  if(topic && typeof topic !== 'string') {
-    return Promise.reject({ status: 400, msg: 'Bad request'})
-  }
 
   const queryValues = [];
   const selectColumns = `
