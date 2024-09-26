@@ -1,11 +1,29 @@
 const db = require("../../db/connection");
 const format = require("pg-format");
 
-exports.selectCommentsByArticleId = (article_id) => {
+exports.selectCommentsByArticleId = (article_id, limit = 100, page = 1) => {
+
+  const parsedLimit = parseInt(limit, 10);
+  const parsedPage = parseInt(page, 10);
+  
+  if(isNaN(parsedLimit) || parsedLimit < 1 || parsedLimit > 100 ) {
+    return Promise.reject({ status: 400, msg: 'Bad request'})
+  }
+
+  if(isNaN(parsedPage) || parsedPage < 1 ) {
+    return Promise.reject({ status: 400, msg: 'Bad request'})
+  }
+
+
+  const currentPage = parsedPage;
+  const limitQuery = parsedLimit;
+  const offset = (currentPage - 1) * limitQuery;
+
+
   return db
     .query(
       `
-    SELECT * FROM comments WHERE article_id = $1  ORDER BY created_at DESC`,
+    SELECT * FROM comments WHERE article_id = $1  ORDER BY created_at DESC LIMIT ${limitQuery} OFFSET ${offset}`,
       [article_id]
     )
     .then(({ rows }) => {

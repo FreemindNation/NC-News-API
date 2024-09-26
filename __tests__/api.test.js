@@ -381,6 +381,29 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 
+  test('200: responds with aclist of comments based on limit and page queries provided', () => {
+    return request(app)
+    .get('/api/articles/1/comments')
+    .query({ limit: 10, page: 1 })
+    .expect(200)
+    .then(({ body })=> {
+      const { comments } = body;
+
+      expect(comments.length).toBeLessThanOrEqual(10)
+
+      comments.forEach((comment) => {
+        expect(comment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: expect.any(String),
+          votes: expect.any(Number),
+          author: expect.any(String),
+          article_id: 1,
+          created_at: expect.any(String),
+        });
+      });
+    })
+  });
+
   test('400: responds with " Bad request" if passed a non numeric id', () => {
     return request(app)
       .get("/api/articles/not-a-number/comments")
