@@ -15,22 +15,22 @@ exports.selectCommentsByArticleId = (article_id, limit = 100, page = 1) => {
   }
 
 
-  const currentPage = parsedPage;
-  const limitQuery = parsedLimit;
-  const offset = (currentPage - 1) * limitQuery;
+  const offset = (parsedPage - 1) * parsedLimit;
 
-
-  return db
-    .query(
+  return db.query (
+  
       `
-    SELECT * FROM comments WHERE article_id = $1  ORDER BY created_at DESC LIMIT ${limitQuery} OFFSET ${offset}`,
-      [article_id]
+    SELECT * FROM comments WHERE article_id = $1  ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
+      [article_id, parsedLimit, offset]
     )
     .then(({ rows }) => {
+    
       return rows;
     });
-};
 
+  }
+  
+  
 exports.insertCommentByArticleId = (newComment, article_id) => {
   const { body, username } = newComment;
   const votes = 0;

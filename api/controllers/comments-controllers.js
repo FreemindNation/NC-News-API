@@ -12,8 +12,13 @@ exports.getCommentsByArticleId = (req, res, next)=> {
 
 
     Promise.all(promises)
-    .then((resolvedPromises)=> {
-        const comments = resolvedPromises[0];
+    .then(([comments])=> {
+
+        if(comments.length === 0) {
+            return Promise.reject({ status: 404, msg: 'Page not found'})
+        }
+
+
         res.status(200). send({ comments });
     })
     .catch(next);
