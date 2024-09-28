@@ -897,3 +897,38 @@ describe('POST: /api/topics', () => {
     })
   });
 });
+
+describe('DELETE: /api/articles/:article_id', () => {
+  test('204: deletes article by the given article id', () => {
+    return request(app)
+    .delete('/api/articles/1')
+    .expect(204)
+  });
+
+  test('400: responds with "Bad request" if passed a non numeric article id', () => {
+    return request(app)
+      .delete("/api/articles/not-a-number")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+
+  test('404: responds with "Comment not found" if passed a numberic but non existent article id', () => {
+    return request(app)
+      .delete("/api/articles/55655")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article not found");
+      });
+  });
+
+  test('404: responds with "Route not found" if passed an incorrect route', () => {
+    return request(app)
+      .delete("/api/article/1")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Route not found");
+      });
+  });
+});

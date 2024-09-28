@@ -172,5 +172,9 @@
         "description": "the essence of life"
       }
     }
+  },
+  "DELETE /api/articles/:article_id": {
+    "description": "Deletes an article and its related comments",
+    "queries": []
   }
 }
