@@ -29,7 +29,7 @@ exports.insertTopic = (slug, description)=> {
 
     return db.query(sqlQuery)
     .then(({ rows })=> {
-    console.log(rows);
+        
         return rows[0];
     })
 }

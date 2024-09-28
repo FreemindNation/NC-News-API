@@ -162,5 +162,15 @@
         "comment_count": 0
       }
     }
+  },
+  "POST /api/topics": {
+    "description": "Adds a new topic and responds with the added topic",
+    "queries": [],
+    "exampleResponse": {
+      "newTopic": {
+        "slug": "music",
+        "description": "the essence of life"
+      }
+    }
   }
 }
