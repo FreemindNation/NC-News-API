@@ -817,20 +817,83 @@ describe("POST: /api/articles", () => {
     })
   });
 
-  test('400: responds with "Bad Request" if the post body contains invalid types', () => {
+  test('404: responds with "Route not found" if posting to invalid route', () => {
     const postBody = {
-      author: 1,
+      author: 'butter_bridge',
       title: "Understanding JavaScript Objects",
       body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
       topic: "mitch",
       article_img_url: "https://example.com/default-image.jpg",
     }
     return request(app)
-    .post("/api/articles")
+    .post("/api/article")
+    .send(postBody)
+    .expect(404)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Route not found')
+    })
+  });
+});
+
+describe('POST: /api/topics', () => {
+  test(' Adds a new topic and responds with an object containing the newly added topic', () => {
+    const postBody = {
+      slug: 'music',
+      description: 'the essence of life'
+    }
+
+    return request(app)
+    .post('/api/topics')
+    .send(postBody)
+    .expect(201)
+    .then(({ body })=> {
+      const { newTopic } = body;
+
+      expect(newTopic).toMatchObject({
+        slug: 'music',
+        description: 'the essence of life'
+      })
+    })
+  });
+
+  test('400: responds with "Bad request" if the post body is missing fields', () => {
+    const postBody = {
+      slug: 'music'
+    }
+    return request(app)
+    .post("/api/topics")
     .send(postBody)
     .expect(400)
     .then(({ body })=> {
       expect(body.msg).toBe('Bad request')
+    })
+  });
+
+  test('400: responds with "Bad request" if the post body contains wrong data type', () => {
+    const postBody = {
+      slug: 2,
+      description: 8
+    }
+    return request(app)
+    .post("/api/topics")
+    .send(postBody)
+    .expect(400)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Bad request')
+    })
+  });
+
+  test('404: responds with "Route not found" if posting to invalid route', () => {
+    const postBody = {
+      slug: 'music',
+      description: 'the essence of life'
+    }
+    return request(app)
+    .post("/api/topic")
+    .send(postBody)
+    .expect(404)
+    .then(({ body })=> {
+      expect(body.msg).toBe('Route not found')
     })
   });
 });

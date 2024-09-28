@@ -59,7 +59,7 @@
 
   "GET /api/articles/:article_id/comments": {
     "description": "serves an array of all comments for the given article id.",
-    "queries": [],
+    "queries": ["limit", "page"],
     "exampleResponse": [
       {
         "comment_id": 1,
@@ -160,6 +160,16 @@
         "votes": 0,
         "article_img_url":"https://example.com/default-image.jpg", 
         "comment_count": 0
+      }
+    }
+  },
+  "POST /api/topics": {
+    "description": "Adds a new topic and responds with the added topic",
+    "queries": [],
+    "exampleResponse": {
+      "newTopic": {
+        "slug": "music",
+        "description": "the essence of life"
       }
     }
   }
