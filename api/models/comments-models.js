@@ -1,18 +1,36 @@
 const db = require("../../db/connection");
 const format = require("pg-format");
 
-exports.selectCommentsByArticleId = (article_id) => {
-  return db
-    .query(
+exports.selectCommentsByArticleId = (article_id, limit = 100, page = 1) => {
+
+  const parsedLimit = parseInt(limit, 10);
+  const parsedPage = parseInt(page, 10);
+  
+  if(isNaN(parsedLimit) || parsedLimit < 1 || parsedLimit > 100 ) {
+    return Promise.reject({ status: 400, msg: 'Bad request'})
+  }
+
+  if(isNaN(parsedPage) || parsedPage < 1 ) {
+    return Promise.reject({ status: 400, msg: 'Bad request'})
+  }
+
+
+  const offset = (parsedPage - 1) * parsedLimit;
+
+  return db.query (
+  
       `
-    SELECT * FROM comments WHERE article_id = $1  ORDER BY created_at DESC`,
-      [article_id]
+    SELECT * FROM comments WHERE article_id = $1  ORDER BY created_at DESC LIMIT $2 OFFSET $3`,
+      [article_id, parsedLimit, offset]
     )
     .then(({ rows }) => {
+    
       return rows;
     });
-};
 
+  }
+  
+  
 exports.insertCommentByArticleId = (newComment, article_id) => {
   const { body, username } = newComment;
   const votes = 0;

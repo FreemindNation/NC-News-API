@@ -381,6 +381,69 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 
+  test('200: responds with aclist of comments based on limit and page queries provided', () => {
+    return request(app)
+    .get('/api/articles/1/comments')
+    .query({ limit: 10, page: 2 })
+    .expect(200)
+    .then(({ body })=> {
+      const { comments } = body;
+
+      expect(comments.length).toBeLessThanOrEqual(10)
+
+      comments.forEach((comment) => {
+        expect(comment).toMatchObject({
+          comment_id: expect.any(Number),
+          body: expect.any(String),
+          votes: expect.any(Number),
+          author: expect.any(String),
+          article_id: 1,
+          created_at: expect.any(String),
+        });
+      });
+    })
+  });
+
+  test('400: responds with "Bad request" if limit or page queries are non numeric', () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .query({ limit: "invalid", page: 'not a number' })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+
+  test('400: responds with "Bad request" if limit or page queries are negative numbers', () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .query({ limit: -10, page: -2 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+
+  test('400: responds with "Bad request" if limit query exceeds max allowed value', () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .query({ limit: 101, page: 2 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
+  });
+
+  test('404: responds with "Page not found" if page query exceeds max allowed value', () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .query({ limit: 10, page: 4 })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Page not found");
+      });
+  });
+
   test('400: responds with " Bad request" if passed a non numeric id', () => {
     return request(app)
       .get("/api/articles/not-a-number/comments")
