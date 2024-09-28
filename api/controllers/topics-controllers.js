@@ -10,7 +10,6 @@ exports.getTopics = (req, res, next)=> {
 
 exports.postTopic = (req, res, next)=> {
     const { slug, description } = req.body;
-    console.log(req.body);
     insertTopic(slug, description)
     .then((newTopic)=> {
         res.status(201).send({ newTopic })
