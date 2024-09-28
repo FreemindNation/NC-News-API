@@ -834,3 +834,25 @@ describe("POST: /api/articles", () => {
     })
   });
 });
+
+describe('POST: /api/topics', () => {
+  test.only(' Adds a new topic and responds with an object containing the newly added topic', () => {
+    const postBody = {
+      slug: 'music',
+      description: 'the essence of life'
+    }
+
+    return request(app)
+    .post('/api/topics')
+    .send(postBody)
+    .expect(201)
+    .then(({ body })=> {
+      const { newTopic } = body;
+
+      expect(newTopic).toMatchObject({
+        slug: 'music',
+        description: 'the essence of life'
+      })
+    })
+  });
+});
