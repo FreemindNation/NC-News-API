@@ -36,7 +36,13 @@
           "article_img_url": "https://example.com/default-image.jpg",
           "comment_count": 0
         }
-      ]
+      ],
+      "total_count": 12,
+      "totalPages": 2,
+      "currentPage": 2,
+      "limit": 10,
+      "prevPage": 1,
+      "nextPage": null
     }
   },
   "GET /api/articles/:article_id": {
@@ -60,121 +66,129 @@
   "GET /api/articles/:article_id/comments": {
     "description": "serves an array of all comments for the given article id.",
     "queries": ["limit", "page"],
-    "exampleResponse": [
-      {
-        "comment_id": 1,
-        "body": "This is a body of the comment.",
-        "votes": 10,
-        "author": "JohnDoe",
-        "article_id": 23,
-        "created_at": "2024-05-29T12:34:56Z"
-      }
-    ]
-  },
-  "POST /api/articles/:article_id/comments": {
-    "description": " adds a comment for an article by the given article id and responds with the added comment",
-    "queries": [],
     "exampleResponse": {
-      "newComment": {
-        "comment_id": 1,
-        "votes": 0,
-        "created_at": "2024-05-30T12:34:56Z",
-        "author": "butter_bridge",
-        "body": "This is a new comment",
-        "article_id": 1
+      "comments": [
+        {
+          "comment_id": 1,
+          "body": "This is a body of the comment.",
+          "votes": 10,
+          "author": "JohnDoe",
+          "article_id": 23,
+          "created_at": "2024-05-29T12:34:56Z"
+        }
+      ],
+      "total_count": 11,
+      "totalPages": 2,
+      "currentPage": 2,
+      "limit": 10,
+      "prevPage": 1,
+      "nextPage": null
+    },
+    "POST /api/articles/:article_id/comments": {
+      "description": " adds a comment for an article by the given article id and responds with the added comment",
+      "queries": [],
+      "exampleResponse": {
+        "newComment": {
+          "comment_id": 1,
+          "votes": 0,
+          "created_at": "2024-05-30T12:34:56Z",
+          "author": "butter_bridge",
+          "body": "This is a new comment",
+          "article_id": 1
+        }
       }
+    },
+    "PATCH /api/articles/:article_id": {
+      "description": "increments the vote of a specified article via article id by the given value and responds with the updated article",
+      "queries": [],
+      "exampleResponse": {
+        "updatedArticle": {
+          "author": "John Doe",
+          "title": "The Future of tech",
+          "article_id": 12345,
+          "body": "This is a sample article about the future of technology.",
+          "topic": "Technology",
+          "created_at": "2024-05-29T12:34:56Z",
+          "votes": 100,
+          "article_img_url": "https://example.com/image.jpg"
+        }
+      }
+    },
+    "DELETE /api/comments/:comment_id": {
+      "description": "deletes comment by given comment id. no response given",
+      "queries": []
+    },
+    "GET /api/users": {
+      "description": "serves an array of all users",
+      "queries": [],
+      "exampleResponse": [
+        {
+          "username": "rogue007",
+          "name": "John",
+          "avatar_url": "https://avatars2.githubusercontent.com/u/24343918?s=400&v=4"
+        },
+        {
+          "username": "lukeCage001",
+          "name": "do_everyrhing",
+          "avatar_url": "https://www.golenbock.com/wp-content/uploads/2024/01/placeholder-user.png"
+        }
+      ]
+    },
+    "GET /api/users/:username": {
+      "description": "serves an object containing a user matching the given username on a key of user",
+      "queries": [],
+      "exampleResponse": {
+        "user": {
+          "username": "lukeCage001",
+          "name": "do_everyrhing",
+          "avatar_url": "https://www.golenbock.com/wp-content/uploads/2024/01/placeholder-user.png"
+        }
+      }
+    },
+    "PATCH /api/comments/:comments_id": {
+      "description": "increments the vote of a specified comment via comment id by the given value and responds with the updated comment",
+      "queries": [],
+      "exampleResponse": {
+        "updatedArticle": {
+          "comment_id": 1,
+          "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+          "votes": 17,
+          "author": "butter_bridge",
+          "article_id": 9,
+          "created_at": "2020-04-06T12:17:00.000Z"
+        }
+      }
+    },
+    "POST /api/articles": {
+      "description": "Adds a new article with the given Post body and responds with added article",
+      "queries": [],
+      "exampleResponse": {
+        "newArticle": {
+          "article_id": 14,
+          "title": "Understanding JavaScript Objects",
+          "topic": "mitch",
+          "author": "butter_bridge",
+          "body": "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
+          "created_at": "2024-09-24T14:39:45.645Z",
+          "votes": 0,
+          "article_img_url": "https://example.com/default-image.jpg",
+          "comment_count": 0
+        }
+      }
+    },
+    "POST /api/topics": {
+      "description": "Adds a new topic and responds with the added topic",
+      "queries": [],
+      "exampleResponse": {
+        "newTopic": {
+          "slug": "music",
+          "description": "the essence of life"
+        }
+      }
+    },
+    "DELETE /api/articles/:article_id": {
+      "description": "Deletes an article and its related comments",
+      "queries": []
     }
-  },
-  "PATCH /api/articles/:article_id": {
-    "description": "increments the vote of a specified article via article id by the given value and responds with the updated article",
-    "queries": [],
-    "exampleResponse": {
-      "updatedArticle": {
-        "author": "John Doe",
-        "title": "The Future of tech",
-        "article_id": 12345,
-        "body": "This is a sample article about the future of technology.",
-        "topic": "Technology",
-        "created_at": "2024-05-29T12:34:56Z",
-        "votes": 100,
-        "article_img_url": "https://example.com/image.jpg"
-      }
-    }
-  },
-  "DELETE /api/comments/:comment_id": {
-    "description": "deletes comment by given comment id. no response given",
-    "queries": []
-  },
-  "GET /api/users": {
-    "description": "serves an array of all users",
-    "queries": [],
-    "exampleResponse": [
-      {
-        "username": "rogue007",
-        "name": "John",
-        "avatar_url": "https://avatars2.githubusercontent.com/u/24343918?s=400&v=4"
-      },
-      {
-        "username": "lukeCage001",
-        "name": "do_everyrhing",
-        "avatar_url": "https://www.golenbock.com/wp-content/uploads/2024/01/placeholder-user.png"
-      }
-    ]
-  },
-  "GET /api/users/:username": {
-    "description": "serves an object containing a user matching the given username on a key of user",
-    "queries": [],
-    "exampleResponse": {
-      "user": {
-        "username": "lukeCage001",
-        "name": "do_everyrhing",
-        "avatar_url": "https://www.golenbock.com/wp-content/uploads/2024/01/placeholder-user.png"
-      }
-    }
-  },
-  "PATCH /api/comments/:comments_id": {
-    "description": "increments the vote of a specified comment via comment id by the given value and responds with the updated comment",
-    "queries": [],
-    "exampleResponse": {
-      "updatedArticle": {
-        "comment_id": 1,
-        "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-        "votes": 17,
-        "author": "butter_bridge",
-        "article_id": 9,
-        "created_at": "2020-04-06T12:17:00.000Z"
-      }
-    }
-  },
-  "POST /api/articles": {
-    "description": "Adds a new article with the given Post body and responds with added article",
-    "queries": [],
-    "exampleResponse": {
-      "newArticle": {
-        "article_id": 14,
-        "title": "Understanding JavaScript Objects",
-        "topic": "mitch",
-        "author": "butter_bridge",
-        "body": "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
-        "created_at": "2024-09-24T14:39:45.645Z",
-        "votes": 0,
-        "article_img_url": "https://example.com/default-image.jpg",
-        "comment_count": 0
-      }
-    }
-  },
-  "POST /api/topics": {
-    "description": "Adds a new topic and responds with the added topic",
-    "queries": [],
-    "exampleResponse": {
-      "newTopic": {
-        "slug": "music",
-        "description": "the essence of life"
-      }
-    }
-  },
-  "DELETE /api/articles/:article_id": {
-    "description": "Deletes an article and its related comments",
-    "queries": []
   }
 }
