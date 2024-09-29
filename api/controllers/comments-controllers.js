@@ -1,65 +1,63 @@
-
 const { checkArticleExist } = require("../models/articles-models");
-const { selectCommentsByArticleId, insertCommentByArticleId, removeCommentById, updateCommentById } = require("../models/comments-models")
+const {
+  selectCommentsByArticleId,
+  insertCommentByArticleId,
+  removeCommentById,
+  updateCommentById,
+} = require("../models/comments-models");
 
+exports.getCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  const { limit, page } = req.query;
 
+  const promises = [
+    selectCommentsByArticleId(article_id, limit, page),
+    checkArticleExist(article_id),
+  ];
 
-exports.getCommentsByArticleId = (req, res, next)=> {
-        const { article_id } = req.params;
-        const { limit, page } = req.query;
+  Promise.all(promises)
+    .then(([comments]) => {
+      if (comments.length === 0) {
+        return Promise.reject({ status: 404, msg: "Page not found" });
+      }
 
-    const promises = [selectCommentsByArticleId(article_id, limit, page), checkArticleExist(article_id)]
-
-
-    Promise.all(promises)
-    .then(([comments])=> {
-
-        if(comments.length === 0) {
-            return Promise.reject({ status: 404, msg: 'Page not found'})
-        }
-
-
-        res.status(200). send({ comments });
+      res.status(200).send({ comments });
     })
     .catch(next);
-}
+};
 
-exports.postCommentByArticleId = (req, res, next)=> {
-    const   newComment  = req.body;
-    const  { article_id } = req.params;
-    
+exports.postCommentByArticleId = (req, res, next) => {
+  const newComment = req.body;
+  const { article_id } = req.params;
 
-    const promises = [insertCommentByArticleId(newComment, article_id)];
+  const promises = [insertCommentByArticleId(newComment, article_id)];
 
-    if(article_id){
-        promises.push(checkArticleExist(article_id))
-    }
-    Promise.all(promises)
-    .then((resolvedPromises)=> {
-    
-        const newComment  = resolvedPromises[0];
-        res.status(201).send({ newComment })
+  if (article_id) {
+    promises.push(checkArticleExist(article_id));
+  }
+  Promise.all(promises)
+    .then((resolvedPromises) => {
+      const newComment = resolvedPromises[0];
+      res.status(201).send({ newComment });
     })
     .catch(next);
-}
+};
 
-
-exports.deleteCommentById = (req, res, next)=> {
-    const { comment_id } = req.params;
-    removeCommentById(comment_id)
-    .then(()=> {
-        res.status(204).send();
+exports.deleteCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  removeCommentById(comment_id)
+    .then(() => {
+      res.status(204).send();
     })
     .catch(next);
-}
+};
 
-
-exports.patchCommentById = (req, res, next)=> {
-    const { comment_id } = req.params;
-    const { inc_votes } = req.body;
-    updateCommentById(comment_id, inc_votes)
-    .then((updatedComment)=> {
-        res.status(200).send({ updatedComment })
+exports.patchCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  const { inc_votes } = req.body;
+  updateCommentById(comment_id, inc_votes)
+    .then((updatedComment) => {
+      res.status(200).send({ updatedComment });
     })
     .catch(next);
-}
+};

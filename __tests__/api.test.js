@@ -217,39 +217,39 @@ describe("GET /api/articles", () => {
       });
   });
 
-  test('200: responds with an array of articles with a limit set and starting from a set page and all the metadata', () => {
+  test("200: responds with an array of articles with a limit set and starting from a set page and all the metadata", () => {
     return request(app)
-    .get('/api/articles')
-    .query({ limit: 10, page: 1 })
-    .expect(200)
-    .then(({ body })=> {
-      const { articles, total_count, totalPages, currentPage, limit  } = body;
-    
-      expect(articles.length).toBeLessThanOrEqual(10)
-      expect(total_count).toBe(13)
-      expect(totalPages).toBe(2)
-      expect(currentPage).toBe(1)
-      expect(limit).toBe(10)
+      .get("/api/articles")
+      .query({ limit: 10, page: 1 })
+      .expect(200)
+      .then(({ body }) => {
+        const { articles, total_count, totalPages, currentPage, limit } = body;
 
-      articles.forEach((article) => {
-        expect(article).toMatchObject({
-          author: expect.any(String),
-          title: expect.any(String),
-          article_id: expect.any(Number),
-          topic: expect.any(String),
-          created_at: expect.any(String),
-          votes: expect.any(Number),
-          article_img_url: expect.any(String),
-          comment_count: expect.any(Number),
+        expect(articles.length).toBeLessThanOrEqual(10);
+        expect(total_count).toBe(13);
+        expect(totalPages).toBe(2);
+        expect(currentPage).toBe(1);
+        expect(limit).toBe(10);
+
+        articles.forEach((article) => {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number),
+          });
         });
       });
-    })
   });
 
   test('400: responds with "Bad request" if limit or page queries are non numeric', () => {
     return request(app)
       .get("/api/articles")
-      .query({ limit: "invalid", page: 'not a number' })
+      .query({ limit: "invalid", page: "not a number" })
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request");
@@ -346,7 +346,6 @@ describe("GET /api/articles", () => {
       });
   });
 
-
   test('404: responds with "Route not found" if passed an invalid route', () => {
     return request(app)
       .get("/api/not-a-valid-route")
@@ -381,33 +380,33 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 
-  test('200: responds with aclist of comments based on limit and page queries provided', () => {
+  test("200: responds with aclist of comments based on limit and page queries provided", () => {
     return request(app)
-    .get('/api/articles/1/comments')
-    .query({ limit: 10, page: 2 })
-    .expect(200)
-    .then(({ body })=> {
-      const { comments } = body;
+      .get("/api/articles/1/comments")
+      .query({ limit: 10, page: 2 })
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
 
-      expect(comments.length).toBeLessThanOrEqual(10)
+        expect(comments.length).toBeLessThanOrEqual(10);
 
-      comments.forEach((comment) => {
-        expect(comment).toMatchObject({
-          comment_id: expect.any(Number),
-          body: expect.any(String),
-          votes: expect.any(Number),
-          author: expect.any(String),
-          article_id: 1,
-          created_at: expect.any(String),
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            body: expect.any(String),
+            votes: expect.any(Number),
+            author: expect.any(String),
+            article_id: 1,
+            created_at: expect.any(String),
+          });
         });
       });
-    })
   });
 
   test('400: responds with "Bad request" if limit or page queries are non numeric', () => {
     return request(app)
       .get("/api/articles/1/comments")
-      .query({ limit: "invalid", page: 'not a number' })
+      .query({ limit: "invalid", page: "not a number" })
       .expect(400)
       .then(({ body }) => {
         expect(body.msg).toBe("Bad request");
@@ -791,14 +790,14 @@ describe("POST: /api/articles", () => {
       body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
       topic: "mitch",
       article_img_url: "https://example.com/default-image.jpg",
-    }
+    };
     return request(app)
-    .post("/api/articles")
-    .send(postBody)
-    .expect(400)
-    .then(({ body })=> {
-      expect(body.msg).toBe('Bad request')
-    })
+      .post("/api/articles")
+      .send(postBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
   });
 
   test('400: responds with "Bad request" if the post body is missing fields', () => {
@@ -807,102 +806,100 @@ describe("POST: /api/articles", () => {
       body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
       topic: "mitch",
       article_img_url: "https://example.com/default-image.jpg",
-    }
+    };
     return request(app)
-    .post("/api/articles")
-    .send(postBody)
-    .expect(400)
-    .then(({ body })=> {
-      expect(body.msg).toBe('Bad request')
-    })
+      .post("/api/articles")
+      .send(postBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
   });
 
   test('404: responds with "Route not found" if posting to invalid route', () => {
     const postBody = {
-      author: 'butter_bridge',
+      author: "butter_bridge",
       title: "Understanding JavaScript Objects",
       body: "This article explains the basics of JavaScript objects, including how to create, modify, and access object properties.",
       topic: "mitch",
       article_img_url: "https://example.com/default-image.jpg",
-    }
+    };
     return request(app)
-    .post("/api/article")
-    .send(postBody)
-    .expect(404)
-    .then(({ body })=> {
-      expect(body.msg).toBe('Route not found')
-    })
+      .post("/api/article")
+      .send(postBody)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Route not found");
+      });
   });
 });
 
-describe('POST: /api/topics', () => {
-  test(' Adds a new topic and responds with an object containing the newly added topic', () => {
+describe("POST: /api/topics", () => {
+  test(" Adds a new topic and responds with an object containing the newly added topic", () => {
     const postBody = {
-      slug: 'music',
-      description: 'the essence of life'
-    }
+      slug: "music",
+      description: "the essence of life",
+    };
 
     return request(app)
-    .post('/api/topics')
-    .send(postBody)
-    .expect(201)
-    .then(({ body })=> {
-      const { newTopic } = body;
+      .post("/api/topics")
+      .send(postBody)
+      .expect(201)
+      .then(({ body }) => {
+        const { newTopic } = body;
 
-      expect(newTopic).toMatchObject({
-        slug: 'music',
-        description: 'the essence of life'
-      })
-    })
+        expect(newTopic).toMatchObject({
+          slug: "music",
+          description: "the essence of life",
+        });
+      });
   });
 
   test('400: responds with "Bad request" if the post body is missing fields', () => {
     const postBody = {
-      slug: 'music'
-    }
+      slug: "music",
+    };
     return request(app)
-    .post("/api/topics")
-    .send(postBody)
-    .expect(400)
-    .then(({ body })=> {
-      expect(body.msg).toBe('Bad request')
-    })
+      .post("/api/topics")
+      .send(postBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
   });
 
   test('400: responds with "Bad request" if the post body contains wrong data type', () => {
     const postBody = {
       slug: 2,
-      description: 8
-    }
+      description: 8,
+    };
     return request(app)
-    .post("/api/topics")
-    .send(postBody)
-    .expect(400)
-    .then(({ body })=> {
-      expect(body.msg).toBe('Bad request')
-    })
+      .post("/api/topics")
+      .send(postBody)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request");
+      });
   });
 
   test('404: responds with "Route not found" if posting to invalid route', () => {
     const postBody = {
-      slug: 'music',
-      description: 'the essence of life'
-    }
+      slug: "music",
+      description: "the essence of life",
+    };
     return request(app)
-    .post("/api/topic")
-    .send(postBody)
-    .expect(404)
-    .then(({ body })=> {
-      expect(body.msg).toBe('Route not found')
-    })
+      .post("/api/topic")
+      .send(postBody)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Route not found");
+      });
   });
 });
 
-describe('DELETE: /api/articles/:article_id', () => {
-  test('204: deletes article by the given article id', () => {
-    return request(app)
-    .delete('/api/articles/1')
-    .expect(204)
+describe("DELETE: /api/articles/:article_id", () => {
+  test("204: deletes article by the given article id", () => {
+    return request(app).delete("/api/articles/1").expect(204);
   });
 
   test('400: responds with "Bad request" if passed a non numeric article id', () => {

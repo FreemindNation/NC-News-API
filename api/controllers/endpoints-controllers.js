@@ -1,9 +1,9 @@
-const { selectEndpoints } = require('../models/endpoints-models');
+const { selectEndpoints } = require("../models/endpoints-models");
 
-exports.getEndpoints = (req, res, next)=> {
-    selectEndpoints()
-    .then((endpoints)=> {
-        res.status(200).send({ endpoints })
+exports.getEndpoints = (req, res, next) => {
+  selectEndpoints()
+    .then((endpoints) => {
+      res.status(200).send({ endpoints });
     })
     .catch(next);
-}
+};

@@ -18,16 +18,26 @@ exports.getArticlesById = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
   const { topic, sort_by, order, limit, page } = req.query;
-  
+
   selectArticles(topic, sort_by, order, limit, page)
     .then((articles) => {
-        const totalCount = parseInt(articles[0].total_count);
-        const cleanedArticles = articles.map(({ total_count, ...restOfKeys })=> restOfKeys)
-        const totalPages = Math.ceil(totalCount / limit);
-        const currentPage = parseInt(page, 10) || 1;
-        const limitQuery = parseInt(limit, 10) || 100;
+      const totalCount = parseInt(articles[0].total_count);
+      const cleanedArticles = articles.map(
+        ({ total_count, ...restOfKeys }) => restOfKeys
+      );
+      const totalPages = Math.ceil(totalCount / limit);
+      const currentPage = parseInt(page, 10) || 1;
+      const limitQuery = parseInt(limit, 10) || 100;
 
-        res.status(200).send({ articles: cleanedArticles, total_count: totalCount, totalPages, currentPage, limit: limitQuery });
+      res
+        .status(200)
+        .send({
+          articles: cleanedArticles,
+          total_count: totalCount,
+          totalPages,
+          currentPage,
+          limit: limitQuery,
+        });
     })
     .catch(next);
 };
@@ -52,11 +62,11 @@ exports.postArticle = (req, res, next) => {
 };
 
 exports.deleteArticleById = (req, res, next) => {
-    const { article_id } = req.params;
-    
-    removeArticleById(article_id)
-    .then(()=> {
-        res.status(204).send()
+  const { article_id } = req.params;
+
+  removeArticleById(article_id)
+    .then(() => {
+      res.status(204).send();
     })
-    .catch(next)
-}
+    .catch(next);
+};
