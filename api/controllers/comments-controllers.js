@@ -21,7 +21,13 @@ exports.getCommentsByArticleId = (req, res, next) => {
         return Promise.reject({ status: 404, msg: "Page not found" });
       }
 
-      res.status(200).send({ comments });
+      const parsedLimit = parseInt(limit, 10) || 100;
+      const totalCount = comments.length > 0 ? parseInt(comments[0].total_count) : 0;
+      const totalPages = Math.ceil(totalCount / parsedLimit);
+      const currentPage = parseInt(page, 10) || 1;
+      const cleanedComments = comments.map(({total_count, ...restOfKeys})=> restOfKeys);
+
+      res.status(200).send({ comments: cleanedComments, total_count: totalCount, totalPages, limit: parsedLimit, currentPage, prevPage: currentPage > 1 ? currentPage - 1 : null, nextPage: currentPage < totalPages ? currentPage + 1 : null});
     })
     .catch(next);
 };

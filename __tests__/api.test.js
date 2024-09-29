@@ -384,12 +384,18 @@ describe("GET /api/articles/:article_id/comments", () => {
   test("200: responds with aclist of comments based on limit and page queries provided", () => {
     return request(app)
       .get("/api/articles/1/comments")
-      .query({ limit: 10, page: 2 })
+      .query({ limit: 10, page: 1 })
       .expect(200)
       .then(({ body }) => {
-        const { comments } = body;
+        const { comments, total_count, totalPages, currentPage, limit, prevPage, nextPage } = body;
 
         expect(comments.length).toBeLessThanOrEqual(10);
+        expect(total_count).toBe(11);
+        expect(totalPages).toBe(2);
+        expect(currentPage).toBe(1);
+        expect(limit).toBe(10);
+        expect(prevPage).toBe(currentPage - 1 || null);
+        expect(nextPage).toBe(currentPage + 1 || null);
 
         comments.forEach((comment) => {
           expect(comment).toMatchObject({
