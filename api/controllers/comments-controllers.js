@@ -22,12 +22,25 @@ exports.getCommentsByArticleId = (req, res, next) => {
       }
 
       const parsedLimit = parseInt(limit, 10) || 100;
-      const totalCount = comments.length > 0 ? parseInt(comments[0].total_count) : 0;
+      const totalCount =
+        comments.length > 0 ? parseInt(comments[0].total_count) : 0;
       const totalPages = Math.ceil(totalCount / parsedLimit);
       const currentPage = parseInt(page, 10) || 1;
-      const cleanedComments = comments.map(({total_count, ...restOfKeys})=> restOfKeys);
+      const cleanedComments = comments.map(
+        ({ total_count, ...restOfKeys }) => restOfKeys
+      );
 
-      res.status(200).send({ comments: cleanedComments, total_count: totalCount, totalPages, limit: parsedLimit, currentPage, prevPage: currentPage > 1 ? currentPage - 1 : null, nextPage: currentPage < totalPages ? currentPage + 1 : null});
+      res
+        .status(200)
+        .send({
+          comments: cleanedComments,
+          total_count: totalCount,
+          totalPages,
+          limit: parsedLimit,
+          currentPage,
+          prevPage: currentPage > 1 ? currentPage - 1 : null,
+          nextPage: currentPage < totalPages ? currentPage + 1 : null,
+        });
     })
     .catch(next);
 };
