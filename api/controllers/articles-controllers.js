@@ -37,6 +37,8 @@ exports.getArticles = (req, res, next) => {
           totalPages,
           currentPage,
           limit: limitQuery,
+          prevPage: currentPage > 1 ? currentPage - 1 : null,
+          nextPage: currentPage < totalPages ? currentPage + 1 : null
         });
     })
     .catch(next);

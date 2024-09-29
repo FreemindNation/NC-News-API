@@ -223,13 +223,14 @@ describe("GET /api/articles", () => {
       .query({ limit: 10, page: 1 })
       .expect(200)
       .then(({ body }) => {
-        const { articles, total_count, totalPages, currentPage, limit } = body;
-
+        const { articles, total_count, totalPages, currentPage, limit, prevPage, nextPage } = body;
         expect(articles.length).toBeLessThanOrEqual(10);
         expect(total_count).toBe(13);
         expect(totalPages).toBe(2);
         expect(currentPage).toBe(1);
         expect(limit).toBe(10);
+        expect(prevPage).toBe(currentPage - 1 || null);
+        expect(nextPage).toBe(currentPage + 1 || null);
 
         articles.forEach((article) => {
           expect(article).toMatchObject({
