@@ -3,7 +3,6 @@ const {
   selectArticles,
   updateArticleById,
   insertArticle,
-  getTotalArticlesCount,
   removeArticleById,
 } = require("../models/articles-models");
 

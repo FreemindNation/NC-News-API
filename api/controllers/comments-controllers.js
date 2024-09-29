@@ -55,8 +55,8 @@ exports.postCommentByArticleId = (req, res, next) => {
     promises.push(checkArticleExist(article_id));
   }
   Promise.all(promises)
-    .then((resolvedPromises) => {
-      const newComment = resolvedPromises[0];
+    .then(([newComment]) => {
+      
       res.status(201).send({ newComment });
     })
     .catch(next);
