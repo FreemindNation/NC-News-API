@@ -94,7 +94,7 @@ To ensure everything is set up correctly and the application is working as expec
 
 To run this project, you need to have the following minimum versions of Node.js and PostgreSQL installed:
 
-- Node.js: v14.0.0
+- Node.js: v21.7.1
 - PostgreSQL: v12.0
 
 ## Conclusion
